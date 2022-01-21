@@ -8,18 +8,21 @@ import {
   TextContainer,
   TextStyle,
   Thumbnail,
-} from "@shopify/polaris";
-import React, { useEffect, useState } from "react";
+} from "@shopify/polaris"
+import React, { useEffect, useState } from "react"
 
-import { GET_PRODUCT_VARIANTS } from "../pagination/queries/GET_PRODUCT_VARIANTS";
-import { useQuery } from "@apollo/client";
+import { GET_PRODUCT_VARIANTS } from "../pagination/queries/GET_PRODUCT_VARIANTS"
+import { useQuery } from "@apollo/client"
+
+// * To use the relay Pagination, you have to add type policies
+// * of the resources you want to fetch to the Apollo Client in _app.js
 
 // * To use the relay Pagination, you have to add type policies
 // * of the resources you want to fetch to the Apollo Client in _app.js
 
 export default function PaginationExample() {
   // * Set results per page
-  const resultsPerPage = 5;
+  const resultsPerPage = 5
 
   // * Store query variables in state, so they can be changed
   const [queryVariables, setQueryVariables] = useState({
@@ -27,7 +30,7 @@ export default function PaginationExample() {
     after: null,
     last: null,
     before: null,
-  });
+  })
 
   // * Start initial query
   const { data, loading, fetchMore, networkStatus, previousData } = useQuery(
@@ -36,7 +39,7 @@ export default function PaginationExample() {
       variables: queryVariables,
       notifyOnNetworkStatusChange: true,
     }
-  );
+  )
 
   // *  Prefetch next page for a better user experience
   // ! Quick page navigation can lead to API throttling
@@ -48,7 +51,7 @@ export default function PaginationExample() {
       data?.productVariants.edges.length > 0 &&
       (networkStatus === 1 || networkStatus === 7)
     ) {
-      setDisplayData(data);
+      setDisplayData(data)
     }
     if (data?.productVariants?.edges) {
       fetchMore({
@@ -58,14 +61,19 @@ export default function PaginationExample() {
           last: null,
           before: null,
         },
-      });
+      })
     }
-  }, [data]);
+  }, [data])
 
   // * Handle data in state, to prevent an empty list
   const [displayData, setDisplayData] = useState({
     productVariants: { edges: [] },
-  });
+  })
+
+  // * Handle data in state, to prevent an empty list
+  const [displayData, setDisplayData] = useState({
+    productVariants: { edges: [] },
+  })
 
   return (
     <Page title="Pagination Demo" breadcrumbs={[{ content: "Back", url: "/" }]}>
@@ -113,14 +121,16 @@ export default function PaginationExample() {
                     title,
                     inventoryPolicy,
                     inventoryQuantity,
-                  } = variant.node;
+                  } = variant.node
                   return (
                     <IndexTable.Row key={id}>
                       <IndexTable.Cell>
-                        <Thumbnail
-                          source={product.images.edges[0].node.transformedSrc}
-                          alt={product.images.edges[0].node.altText}
-                        />
+                        {product.images.edges.length && (
+                          <Thumbnail
+                            source={product.images.edges[0].node.transformedSrc}
+                            alt={product.images.edges[0].node.altText}
+                          />
+                        )}
                       </IndexTable.Cell>
                       <IndexTable.Cell>
                         <Stack vertical spacing="extraTight">
@@ -152,7 +162,7 @@ export default function PaginationExample() {
                         </Stack>
                       </IndexTable.Cell>
                     </IndexTable.Row>
-                  );
+                  )
                 })}
             </IndexTable>
             <Card.Section>
@@ -175,18 +185,18 @@ export default function PaginationExample() {
                         last: resultsPerPage,
                         before: data.productVariants.edges[0].cursor,
                       },
-                    });
+                    })
 
                     // * Add the new query variables to the original query
                     // ! If the variables are not changed, data will not change
                     setQueryVariables((prev) => {
-                      let obj = { ...prev };
-                      obj.first = null;
-                      obj.after = null;
-                      obj.last = resultsPerPage;
-                      obj.before = data.productVariants.edges[0].cursor;
-                      return obj;
-                    });
+                      let obj = { ...prev }
+                      obj.first = null
+                      obj.after = null
+                      obj.last = resultsPerPage
+                      obj.before = data.productVariants.edges[0].cursor
+                      return obj
+                    })
                   }}
                   onNext={() => {
                     // * Use fetchMore to utilize cache
@@ -198,18 +208,18 @@ export default function PaginationExample() {
                         last: null,
                         before: null,
                       },
-                    });
+                    })
 
                     // * Add the new query variables to the original query
                     // ! If the variables are not changed, data will not change
                     setQueryVariables((prev) => {
-                      let obj = { ...prev };
-                      obj.first = resultsPerPage;
-                      obj.after = data.productVariants.edges.at(-1).cursor;
-                      obj.last = null;
-                      obj.before = null;
-                      return obj;
-                    });
+                      let obj = { ...prev }
+                      obj.first = resultsPerPage
+                      obj.after = data.productVariants.edges.at(-1).cursor
+                      obj.last = null
+                      obj.before = null
+                      return obj
+                    })
                   }}
                 ></Pagination>
               </Stack>
@@ -218,5 +228,5 @@ export default function PaginationExample() {
         </Layout.Section>
       </Layout>
     </Page>
-  );
+  )
 }

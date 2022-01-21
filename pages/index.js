@@ -1,15 +1,15 @@
-import { Button, Card, Page, Stack, TextContainer } from "@shopify/polaris";
+import { Button, Card, Page, Stack, TextContainer } from "@shopify/polaris"
 
-import AppLoader from "../components/AppLoader";
-import Link from "next/link";
-import { useAppContext } from "../context/context";
+import AppLoader from "../components/AppLoader"
+import Link from "next/link"
+import { useAppContext } from "../context/context"
 
 const Index = () => {
-  const { appContext } = useAppContext();
+  const { appContext } = useAppContext()
 
-  const { name, myshopifyDomain, email } = appContext.shop;
+  const { name, myshopifyDomain, email } = appContext.shop
 
-  const { id, shop, state, isOnline, accessToken, scope } = appContext.session;
+  const { id, shop, state, isOnline, accessToken, scope } = appContext.session
 
   return (
     <Page
@@ -39,9 +39,14 @@ const Index = () => {
             Pagination Demo
           </Button>
         </Link>
+        <Link href="/orders">
+          <Button fullWidth primary>
+            Orders
+          </Button>
+        </Link>
       </Stack>
     </Page>
-  );
-};
+  )
+}
 
-export default Index;
+export default Index
